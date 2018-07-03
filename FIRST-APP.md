@@ -23,6 +23,11 @@
     yarn start
 
 1. remove unused content
+1. edit vs code settings
+
+        "[typescript]": {
+            "editor.formatOnSave": true
+        }
 1. create .prettierrc
 
         {
