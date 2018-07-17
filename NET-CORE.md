@@ -83,3 +83,100 @@ in Configure function
                     Description = "TEST_HEADER"
                 }));
             });
+
+## Entity Framework
+
+- create Test DB: TestNtt
+
+Pakete installieren
+
+    dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+    dotnet add package Microsoft.EntityFrameworkCore.Design
+
+Context erstellen
+
+    using Microsoft.EntityFrameworkCore;
+
+    namespace TestNttApi.Db {
+    
+    public class NttDbContext : DbContext
+    {
+        public NttDbContext(DbContextOptions<NttDbContext> options) : base(options)
+        {
+        }
+    }
+}
+
+
+Configurieren
+
+    var connection = @"Server=(localdb)\mssqllocaldb;Database=TestNtt;Trusted_Connection=True;ConnectRetryCount=0";";
+     services.AddDbContext<NttDbContext>(options => options.UseSqlServer(connection));
+
+Entity erstellen
+
+    using System;
+
+    public class TimeEntry
+    {
+        public TimeEntry()
+        {
+        }
+
+        public int Id { get; set; }
+        public DateTime Start { get; set; }
+
+        public DateTime End { get; set; }
+    }
+
+## Migration
+
+    dotnet ef migrations add InitialCreate
+    dotnet ef database update
+
+add time Entries
+
+    public DbSet<TimeEntry> TimeEntries { get; set; }
+
+create migration for time entries
+
+    dotnet ef migrations add InitialCreate
+    dotnet ef database update
+
+controller für TimeEntry erstellen
+
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+    using TestNttApi.Db;
+
+    namespace Time.Controllers
+    {
+
+        [Route("api/[controller]")]    
+        public class TimeEntryController : Controller
+        {
+            private readonly NttDbContext _context;
+            public TimeEntryController(NttDbContext context)
+            {
+                _context = context;
+            }
+
+            [HttpGet("")]
+            [ProducesResponseType( typeof( List<TimeEntry> ), 200 )]
+            public async Task<IActionResult> Get()
+            {
+                return Ok(await _context.TimeEntries.ToListAsync());
+            }
+
+            [HttpPost("")]
+            [ProducesResponseType( typeof(TimeEntry), 200 )]
+            public async Task<IActionResult> Create([FromBody] TimeEntry entry)
+            {
+                var result = await _context.TimeEntries.AddAsync(entry);
+                _context.SaveChanges();
+                return Ok(entry);
+            }
+        }
+    }
