@@ -29,7 +29,14 @@ Add TimeEntry.cs
         public DateTime End { get; set; }
     }
 
-    dotnet ef migrations add InitialCreate
+
+in Context hinzufügen
+
+    public DbSet<TimeEntry> TimeEntries { get; set; }
+
+in console
+
+    dotnet ef migrations add AddEntity
     dotnet ef database update
 
 
