@@ -13,7 +13,39 @@ DB Erstellen
 
 
 
-Add TimeEntry
+Add TimeEntry.cs
+
+    using System;
+
+    public class TimeEntry
+    {
+        public TimeEntry()
+        {
+        }
+
+        public int Id { get; set; }
+        public DateTime Start { get; set; }
+
+        public DateTime End { get; set; }
+    }
 
     dotnet ef migrations add InitialCreate
     dotnet ef database update
+
+
+über swagger testen
+
+## NSwag Studio <https://github.com/RSuter/NSwag/wiki/NSwagStudio>
+
+swagger.ts generieren.
+
+1. EntryComponent anpassen
+1. EntriesService anpassen
+
+testen!!
+
+mit css spielen
+
+Client über swagger generieren
+
+implement delet
