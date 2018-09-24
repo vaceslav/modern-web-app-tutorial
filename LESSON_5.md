@@ -20,3 +20,11 @@ show pipes (gerade/ ungeraden)
 custom subscribe / unsubscribe
 
 map operator
+
+
+----
+
+ng g s myservice
+implement
+
+ng g c Counter
